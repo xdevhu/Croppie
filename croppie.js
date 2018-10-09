@@ -175,7 +175,7 @@
     }
 
     /* Utilities */
-    function loadImage(src, doExif) {
+    function loadImage(src, loadOpts) {
         var img = new Image();
         img.style.opacity = '0';
         return new Promise(function (resolve, reject) {
@@ -188,11 +188,11 @@
 
             img.removeAttribute('crossOrigin');
             if (src.match(/^https?:\/\/|^\/\//)) {
-                img.setAttribute('crossOrigin', self.options.crossOrigin);
+                img.setAttribute('crossOrigin', loadOpts.crossOrigin);
             }
 
             img.onload = function () {
-                if (doExif) {
+                if (loadOpts.doExif) {
                     EXIF.getData(img, function () {
                         _resolve();
                     });
@@ -1269,7 +1269,12 @@
         self.data.url = url || self.data.url;
         self.data.boundZoom = zoom;
 
-        return loadImage(url, hasExif).then(function (img) {
+        var loadOpts = {
+            doExif: hasExif,
+            crossOrigin: self.options.crossOrigin
+        }
+
+        return loadImage(url, loadOpts).then(function (img) {
             _replaceImage.call(self, img);
             if (!points.length) {
                 var natDim = naturalImageDimensions(img);
