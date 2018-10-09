@@ -188,7 +188,7 @@
 
             img.removeAttribute('crossOrigin');
             if (src.match(/^https?:\/\/|^\/\//)) {
-                img.setAttribute('crossOrigin', 'anonymous');
+                img.setAttribute('crossOrigin', self.options.crossOrigin);
             }
 
             img.onload = function () {
@@ -1542,6 +1542,7 @@
         enforceBoundary: true,
         enableOrientation: false,
         enableKeyMovement: true,
+        crossOrigin: 'anonymous',
         update: function () { }
     };
 
